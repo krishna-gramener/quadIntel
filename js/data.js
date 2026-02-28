@@ -13,7 +13,7 @@ const INTERNAL_AUDITS = [
     {
         id: "IA-EMQ-2024-011",
         title: "Global System Audit – External Manufacturing Quality (EMQ)",
-        document_file: "data/internal/Global System Audit - EMQ.pdf",
+        document_file: "data/internal/global_system_audit_emq.pdf",
         function: "Corporate Quality Oversight",
         overall_rating: "Critical Vulnerability Identified",
         findings: [
@@ -50,7 +50,7 @@ const INTERNAL_AUDITS = [
     {
         id: "IA-LATINA-2024-044",
         title: "Site Audit – Latina Italy (Sterile Operations)",
-        document_file: "data/internal/Site Audit - Latina Italy.pdf",
+        document_file: "data/internal/site_audit_latina_italy.pdf",
         function: "Site Quality – Sterile Manufacturing",
         overall_rating: "Acceptable with Major Observations",
         findings: [
@@ -87,7 +87,7 @@ const INTERNAL_AUDITS = [
     {
         id: "IA-BRASSICA-2023-112",
         title: "Supplier Audit – Brassica Pharma (APAC)",
-        document_file: "data/internal/Supplier Audit - Brassica Pharma.pdf",
+        document_file: "data/internal/supplier_audit_brassica_pharma.pdf",
         function: "Supplier Quality – APAC",
         overall_rating: "Conditionally Approved",
         findings: [
@@ -130,7 +130,7 @@ const INTERNAL_AUDITS = [
     {
         id: "IA-FORT-2023-219",
         title: "Site Audit – Fort Washington (Consumer Health)",
-        document_file: "data/internal/Site Audit - Fort Washington.pdf",
+        document_file: "data/internal/site_audit_fort_washington.pdf",
         function: "Site QA/QC – Consumer Health",
         overall_rating: "Needs Improvement",
         findings: [
@@ -167,7 +167,7 @@ const INTERNAL_AUDITS = [
     {
         id: "IA-ENG-2023-088",
         title: "Global Engineering Review – Water Systems",
-        document_file: "data/internal/Global Engineering Review - Water Systems.pdf",
+        document_file: "data/internal/global_engineering_review_water_systems.pdf",
         function: "Engineering & Facilities",
         overall_rating: "Adequate with Major Concerns",
         findings: [
@@ -213,7 +213,7 @@ const INTERNAL_AUDITS = [
         id: "WL-ACME-2025",
         company: "Acme United Corp.",
         date: "2025-10-10",
-        document_file: "data/external/Copy of Acme-united-corp-10-10-2025.pdf",
+        document_file: "data/external/acme_united_corp_10_10_2025.pdf",
         allegations: [
             {
                 risk_category: "Water Systems",
@@ -231,7 +231,7 @@ const INTERNAL_AUDITS = [
         id: "WL-ACCUPACK-2024",
         company: "Accupack Midwest",
         date: "2024-08-15",
-        document_file: "data/external/Copy of Accupack-midwest-08-15-2024.pdf",
+        document_file: "data/external/accupack_midwest_08_15_2024.pdf",
         allegations: [
             {
                 risk_category: "Raw Materials",
@@ -248,7 +248,7 @@ const INTERNAL_AUDITS = [
         id: "WL-ACCUBIO-2022",
         company: "Accu Bio Laboratories",
         date: "2022-02-24",
-        document_file: "data/external/Copy of Accu-bio-laboratories-02-24-2022.pdf",
+        document_file: "data/external/accu_bio_laboratories_02_24_2022.pdf",
         allegations: [
             {
                 risk_category: "Investigations",
@@ -266,7 +266,7 @@ const INTERNAL_AUDITS = [
         id: "WL-ABRAXIS-2022",
         company: "Abraxis Bioscience",
         date: "2022-10-31",
-        document_file: "data/external/Copy of Abraxis-bioscience-llc-10-31-2022.pdf",
+        document_file: "data/external/abraxis_bioscience_llc_10_31_2022.pdf",
         allegations: [
             {
                 risk_category: "Sterility",
@@ -284,7 +284,7 @@ const INTERNAL_AUDITS = [
         id: "WL-ABSARA-2021",
         company: "Absara Cosmetics",
         date: "2021-02-18",
-        document_file: "data/external/Copy of Absara-cosmetics-02-18-2021.pdf",
+        document_file: "data/external/absara_cosmetics_02_18_2021.pdf",
         allegations: [
             {
                 risk_category: "Contamination",
@@ -300,7 +300,7 @@ const INTERNAL_AUDITS = [
         id: "WL-ACELLA-2020",
         company: "Acella Pharmaceuticals",
         date: "2020-08-14",
-        document_file: "data/external/Copy of Acella-pharma-08-14-2020.pdf",
+        document_file: "data/external/acella_pharma_08_14_2020.pdf",
         allegations: [
             {
                 risk_category: "Data Integrity",
@@ -317,7 +317,7 @@ const INTERNAL_AUDITS = [
         id: "WL-AACE-2025",
         company: "AACE Pharmaceuticals",
         date: "2025-05-13",
-        document_file: "data/external/Copy of AACE-pharmaceuticals-05-13-2025.pdf",
+        document_file: "data/external/aace_pharmaceuticals_05_13_2025.pdf",
         allegations: [
             {
                 risk_category: "Laboratory Control",
@@ -335,7 +335,7 @@ const INTERNAL_AUDITS = [
         id: "WL-ACCRAPAC-2023",
         company: "Accra-Pac",
         date: "2023-04-20",
-        document_file: "data/external/Copy of Accra-pac-04-20-2023.pdf",
+        document_file: "data/external/accra_pac_04_20_2023.pdf",
         allegations: [
             {
                 risk_category: "Raw Materials",
