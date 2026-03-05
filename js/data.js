@@ -1,390 +1,352 @@
 /**
- * Data Module - Normalized & Fully Cross-Mapped Version
- * Regulatory Risk Correlation System
+ * Data Module - Cluster Based Theme Ontology
+ * Corrected mapping between internal and external themes
  */
-
-
-/* =====================================================
-   INTERNAL AUDIT DOCUMENTS (5)
-===================================================== */
 
 const INTERNAL_AUDITS = [
 
     {
         id: "IA-EMQ-2024-011",
-        title: "Global System Audit – External Manufacturing Quality (EMQ)",
-        document_file: "data/internal/global_system_audit_emq.pdf",
-        function: "Corporate Quality Oversight",
-        overall_rating: "Critical Vulnerability Identified",
-        findings: [
-            {
-                severity: "Critical",
-                risk_category: "Supplier Management",
-                themes: [
-                    "Supplier Oversight Failure"
-                ]
-            },
-            {
-                severity: "Major",
-                risk_category: "Laboratory Control",
-                themes: [
-                    "Laboratory Control Failure",
-                    "Inadequate Validation"
-                ]
-            }
+        title: "Global System Audit – External Manufacturing Quality",
+        document_path: "data/internal/global_system_audit_emq.pdf",
+        themes: [
+            "Desktop Audit Overuse",
+            "CMO Oversight Gap",
+            "Supplier Qualification Weakness",
+            "Vendor Audit Frequency Gap",
+            "Supplier Risk Visibility Gap",
+            "Vendor Documentation Completeness Gap",
+            "Supplier Quality Agreement Gap",
+            "API Source Verification Gap"
         ],
-        internal_summary:
-            "Corporate EMQ audit identified systemic over-reliance on desktop audits and insufficient physical verification of high-risk CMOs. Stability data oversight depended on summary documentation without raw analytical review.",
-        external_pattern_alignment:
-            "Strong alignment with FDA enforcement involving supplier oversight deficiencies, inadequate laboratory control, and insufficient validation oversight.",
-        discrepancies_vs_enforcement:
-            "FDA cases often escalate similar oversight failures into broader data integrity investigations or import alerts. Internal audit did not assess retrospective batch impact.",
+        summary: "Corporate audit identified systemic over-reliance on desktop audits and limited verification of contract manufacturing organizations.",
         recommendations: [
-            "Mandate physical audits for all high-risk CMOs.",
-            "Require raw stability data review.",
-            "Strengthen supplier risk scoring framework."
+            "Mandate physical supplier audits",
+            "Strengthen vendor oversight program",
+            "Implement supplier risk scoring",
+            "Improve vendor documentation review"
         ]
     },
-    
-    
+
     {
         id: "IA-LATINA-2024-044",
-        title: "Site Audit – Latina Italy (Sterile Operations)",
-        document_file: "data/internal/site_audit_latina_italy.pdf",
-        function: "Site Quality – Sterile Manufacturing",
-        overall_rating: "Acceptable with Major Observations",
-        findings: [
-            {
-                severity: "Major",
-                risk_category: "Sterility Assurance",
-                themes: [
-                    "Sterility Assurance Failure",
-                    "Environmental Monitoring Failure"
-                ]
-            },
-            {
-                severity: "Major",
-                risk_category: "Investigations",
-                themes: [
-                    "OOS Investigation Failure"
-                ]
-            }
+        title: "Site Audit – Latina Sterile Operations",
+        document_path: "data/internal/site_audit_latina_italy.pdf",
+        themes: [
+            "Media Fill Contamination",
+            "Aseptic Intervention Risk",
+            "Environmental Monitoring Excursion",
+            "Sterility Investigation Weakness",
+            "Aseptic Operator Handling Risk",
+            "Cleanroom Classification Failure",
+            "Particulate Monitoring Gap",
+            "Aseptic Process Validation Gap"
         ],
-        internal_summary:
-            "Media fill contamination event was closed using statistical allowance without teardown. Environmental monitoring review revealed investigation depth gaps.",
-        external_pattern_alignment:
-            "High alignment with FDA warning letters involving sterility failures and insufficient investigation of contamination events.",
-        discrepancies_vs_enforcement:
-            "FDA enforcement in similar cases often requires facility-wide sterility reassessment and expanded product impact review.",
+        summary: "Sterile manufacturing audit identified media fill contamination events and environmental monitoring excursions.",
         recommendations: [
-            "Mandate teardown following media fill contamination.",
-            "Strengthen sterility investigation SOP requirements.",
-            "Requalify aseptic operators."
+            "Improve contamination investigation procedures",
+            "Strengthen aseptic operator training",
+            "Implement enhanced monitoring protocols"
         ]
     },
-    
-    
+
     {
         id: "IA-BRASSICA-2023-112",
-        title: "Supplier Audit – Brassica Pharma (APAC)",
-        document_file: "data/internal/supplier_audit_brassica_pharma.pdf",
-        function: "Supplier Quality – APAC",
-        overall_rating: "Conditionally Approved",
-        findings: [
-            {
-                severity: "Major",
-                risk_category: "Supplier Management",
-                themes: [
-                    "Supplier Oversight Failure"
-                ]
-            },
-            {
-                severity: "Major",
-                risk_category: "Data Integrity",
-                themes: [
-                    "Data Integrity Failure"
-                ]
-            },
-            {
-                severity: "Major",
-                risk_category: "Validation",
-                themes: [
-                    "Inadequate Validation"
-                ]
-            }
+        title: "Supplier Audit – Brassica Pharma",
+        document_path: "data/internal/supplier_audit_brassica_pharma.pdf",
+        themes: [
+            "Aseptic Validation Documentation Gap",
+            "Raw Data Transparency Issue",
+            "Supplier Self Assessment Reliance",
+            "Third Party Laboratory Dependence",
+            "Supplier Validation Weakness",
+            "Vendor Documentation Completeness Gap",
+            "Supplier Quality Data Gap"
         ],
-        internal_summary:
-            "Desktop requalification revealed incomplete aseptic validation documentation and limited raw data transparency from supplier.",
-        external_pattern_alignment:
-            "High alignment with FDA enforcement patterns involving incomplete validation, third-party lab oversight deficiencies, and data integrity concerns.",
-        discrepancies_vs_enforcement:
-            "FDA enforcement frequently escalates similar documentation gaps into broader data integrity reviews and operational restrictions.",
+        summary: "Supplier qualification relied heavily on documentation review without verifying raw validation data.",
         recommendations: [
-            "Require raw validation data submission.",
-            "Conduct on-site verification audit.",
-            "Strengthen supplier quality agreement clauses."
+            "Require raw validation datasets",
+            "Conduct onsite supplier verification",
+            "Implement supplier data integrity checks"
         ]
     },
-    
-    
+
     {
         id: "IA-FORT-2023-219",
-        title: "Site Audit – Fort Washington (Consumer Health)",
-        document_file: "data/internal/site_audit_fort_washington.pdf",
-        function: "Site QA/QC – Consumer Health",
-        overall_rating: "Needs Improvement",
-        findings: [
-            {
-                severity: "Critical",
-                risk_category: "Raw Material Testing",
-                themes: [
-                    "Impurity Testing Failure"
-                ]
-            },
-            {
-                severity: "Major",
-                risk_category: "Investigations",
-                themes: [
-                    "OOS Investigation Failure",
-                    "Laboratory Control Failure"
-                ]
-            }
+        title: "Site Audit – Fort Washington",
+        document_path: "data/internal/site_audit_fort_washington.pdf",
+        themes: [
+            "OOS Retesting Practice",
+            "OOS Investigation Weakness",
+            "DEG Testing Waiver",
+            "Benzene Testing Waiver",
+            "COA Reliance Without Verification",
+            "Impurity Testing Gap",
+            "Laboratory Control Weakness",
+            "Analytical Method Validation Gap"
         ],
-        internal_summary:
-            "Waiver of DEG and benzene testing combined with OOS retesting practices created elevated adulteration risk.",
-        external_pattern_alignment:
-            "Very high alignment with FDA warning letters involving DEG contamination, benzene contamination, and improper OOS retesting practices.",
-        discrepancies_vs_enforcement:
-            "FDA enforcement in similar cases often results in recalls, consent decrees, or facility shutdown.",
+        summary: "Audit identified repeated OOS retesting practices and inadequate impurity testing verification.",
         recommendations: [
-            "Reinstate confirmatory impurity testing.",
-            "Eliminate preliminary OOS retesting.",
-            "Conduct retrospective batch review."
+            "Reinstate confirmatory impurity testing",
+            "Strengthen investigation protocols",
+            "Improve laboratory oversight"
         ]
     },
-    
-    
+
     {
         id: "IA-ENG-2023-088",
         title: "Global Engineering Review – Water Systems",
-        document_file: "data/internal/global_engineering_review_water_systems.pdf",
-        function: "Engineering & Facilities",
-        overall_rating: "Adequate with Major Concerns",
-        findings: [
-            {
-                severity: "Major",
-                risk_category: "Water Systems",
-                themes: [
-                    "Water System Contamination",
-                    "Environmental Monitoring Failure"
-                ]
-            },
-            {
-                severity: "Major",
-                risk_category: "Governance",
-                themes: [
-                    "Inadequate CAPA"
-                ]
-            }
+        document_path: "data/internal/global_engineering_review_water_systems.pdf",
+        themes: [
+            "Sanitization Postponement",
+            "Biofilm Formation Risk",
+            "Burkholderia Detection",
+            "Water System Microbial Drift",
+            "Maintenance Deferral Risk",
+            "Water System Design Flaw",
+            "Microbial Alert Level Exceedance"
         ],
-        internal_summary:
-            "Repeated sanitization postponements and upward microbial drift trends indicate increasing contamination risk in legacy water systems.",
-        external_pattern_alignment:
-            "Very high alignment with FDA enforcement involving water system contamination and microbial control breakdown.",
-        discrepancies_vs_enforcement:
-            "FDA enforcement typically escalates once microbial action limits are breached or CAPA is deemed ineffective.",
+        summary: "Engineering review identified microbial drift trends and sanitization postponements in purified water systems.",
         recommendations: [
-            "Restrict sanitization override usage.",
-            "Implement microbial early-warning thresholds.",
-            "Strengthen CAPA triggers for repeated drift."
+            "Implement early microbial warning thresholds",
+            "Improve sanitization scheduling",
+            "Conduct water system design review"
         ]
     }
-    
-    ];
-    
-    
-    /* =====================================================
-       EXTERNAL WARNING LETTERS (8)
-    ===================================================== */
-    
-    const EXTERNAL_DOCUMENTS = [
-    
+
+];
+
+
+const EXTERNAL_DOCUMENTS = [
+
     {
         id: "WL-ACME-2025",
-        company: "Acme United Corp.",
-        date: "2025-10-10",
-        document_file: "data/external/acme_united_corp_10_10_2025.pdf",
-        allegations: [
-            {
-                risk_category: "Water Systems",
-                themes: [
-                    "Water System Contamination",
-                    "OOS Investigation Failure",
-                    "Environmental Monitoring Failure"
-                ]
-            }
+        company: "Acme United Corp",
+        document_path: "data/external/acme_united_corp_10_10_2025.pdf",
+        themes: [
+            "Water System Contamination",
+            "Burkholderia Cepacia Detection",
+            "Inadequate Sanitization Control",
+            "Microbial Monitoring Failure",
+            "Water System Design Deficiency"
         ],
-        cfr_violations: ["21 CFR 211.63", "21 CFR 211.192"]
+        summary: "FDA cited contamination in the purified water system due to inadequate sanitization controls.",
+        key_findings: [
+            "Burkholderia contamination detected",
+            "Sanitization program inadequate"
+        ]
     },
-    
-    {
-        id: "WL-ACCUPACK-2024",
-        company: "Accupack Midwest",
-        date: "2024-08-15",
-        document_file: "data/external/accupack_midwest_08_15_2024.pdf",
-        allegations: [
-            {
-                risk_category: "Raw Materials",
-                themes: [
-                    "Impurity Testing Failure",
-                    "Supplier Oversight Failure"
-                ]
-            }
-        ],
-        cfr_violations: ["21 CFR 211.84"]
-    },
-    
-    {
-        id: "WL-ACCUBIO-2022",
-        company: "Accu Bio Laboratories",
-        date: "2022-02-24",
-        document_file: "data/external/accu_bio_laboratories_02_24_2022.pdf",
-        allegations: [
-            {
-                risk_category: "Investigations",
-                themes: [
-                    "OOS Investigation Failure",
-                    "Data Integrity Failure",
-                    "Laboratory Control Failure"
-                ]
-            }
-        ],
-        cfr_violations: ["21 CFR 211.192"]
-    },
-    
-    {
-        id: "WL-ABRAXIS-2022",
-        company: "Abraxis Bioscience",
-        date: "2022-10-31",
-        document_file: "data/external/abraxis_bioscience_llc_10_31_2022.pdf",
-        allegations: [
-            {
-                risk_category: "Sterility",
-                themes: [
-                    "Sterility Assurance Failure",
-                    "Environmental Monitoring Failure",
-                    "Inadequate Validation"
-                ]
-            }
-        ],
-        cfr_violations: ["21 CFR 211.113"]
-    },
-    
-    {
-        id: "WL-ABSARA-2021",
-        company: "Absara Cosmetics",
-        date: "2021-02-18",
-        document_file: "data/external/absara_cosmetics_02_18_2021.pdf",
-        allegations: [
-            {
-                risk_category: "Contamination",
-                themes: [
-                    "Water System Contamination"
-                ]
-            }
-        ],
-        cfr_violations: ["21 CFR 211.67"]
-    },
-    
+
     {
         id: "WL-ACELLA-2020",
         company: "Acella Pharmaceuticals",
-        date: "2020-08-14",
-        document_file: "data/external/acella_pharma_08_14_2020.pdf",
-        allegations: [
-            {
-                risk_category: "Data Integrity",
-                themes: [
-                    "Data Integrity Failure",
-                    "Laboratory Control Failure"
-                ]
-            }
+        document_path: "data/external/acella_pharma_08_14_2020.pdf",
+        themes: [
+            "Data Integrity Failure",
+            "Audit Trail Manipulation",
+            "Electronic Record Integrity Gap",
+            "Laboratory Data Governance Failure"
         ],
-        cfr_violations: ["21 CFR Part 11"]
+        summary: "FDA warning letter cited data integrity failures and manipulation of electronic laboratory records.",
+        key_findings: [
+            "Audit trails manipulated",
+            "Inadequate data governance"
+        ]
     },
-    
+
+    {
+        id: "WL-ACCUPACK-2024",
+        company: "Accupack Midwest",
+        document_path: "data/external/accupack_midwest_08_15_2024.pdf",
+        themes: [
+            "Inadequate Laboratory Controls",
+            "Water System Monitoring Failure",
+            "Process Validation Failure",
+            "Manufacturing Control Failure"
+        ],
+        summary: "FDA cited inadequate laboratory and manufacturing controls including water monitoring failures.",
+        key_findings: [
+            "Laboratory controls insufficient",
+            "Process validation incomplete"
+        ]
+    },
+
+    {
+        id: "WL-ACCUBIO-2022",
+        company: "Accu Bio Laboratories",
+        document_path: "data/external/accu_bio_laboratories_02_24_2022.pdf",
+        themes: [
+            "OOS Investigation Failure",
+            "OOS Retesting Violations",
+            "Laboratory Investigation Weakness",
+            "Analytical Method Validation Gap"
+        ],
+        summary: "FDA warning letter cited systemic failures in OOS investigation procedures.",
+        key_findings: [
+            "OOS results invalidated through retesting"
+        ]
+    },
+
+    {
+        id: "WL-ACCRAPAC-2023",
+        company: "Accra Pac",
+        document_path: "data/external/accra_pac_04_20_2023.pdf",
+        themes: [
+            "Benzene Contamination",
+            "Propellant Impurity Failure",
+            "Raw Material Testing Failure",
+            "Supplier Qualification Failure"
+        ],
+        summary: "FDA cited benzene contamination caused by inadequate propellant testing.",
+        key_findings: [
+            "Benzene detected in product batches"
+        ]
+    },
+
+    {
+        id: "WL-ABSARA-2021",
+        company: "Absara Cosmetics",
+        document_path: "data/external/absara_cosmetics_02_18_2021.pdf",
+        themes: [
+            "Subpotent Drug Product",
+            "Product Quality Failure",
+            "Inadequate Test Methods",
+            "Finished Product Testing Gap"
+        ],
+        summary: "FDA warning letter cited subpotent product due to inadequate test methods.",
+        key_findings: [
+            "Finished product potency below specification"
+        ]
+    },
+
+    {
+        id: "WL-ABRAXIS-2022",
+        company: "Abraxis Bioscience",
+        document_path: "data/external/abraxis_bioscience_llc_10_31_2022.pdf",
+        themes: [
+            "Media Fill Failure",
+            "Aseptic Technique Deficiency",
+            "Sterility Assurance Breakdown",
+            "Aseptic Process Validation Gap"
+        ],
+        summary: "FDA cited repeated media fill failures and sterility assurance issues.",
+        key_findings: [
+            "Media fill contamination events observed"
+        ]
+    },
+
     {
         id: "WL-AACE-2025",
         company: "AACE Pharmaceuticals",
-        date: "2025-05-13",
-        document_file: "data/external/aace_pharmaceuticals_05_13_2025.pdf",
-        allegations: [
-            {
-                risk_category: "Laboratory Control",
-                themes: [
-                    "Laboratory Control Failure",
-                    "Inadequate Validation",
-                    "Data Integrity Failure"
-                ]
-            }
+        document_path: "data/external/aace_pharmaceuticals_05_13_2025.pdf",
+        themes: [
+            "Supplier Qualification Failure",
+            "CMO Oversight Failure",
+            "Contract Manufacturing Compliance Gap"
         ],
-        cfr_violations: ["21 CFR 211.160"]
-    },
-    
-    {
-        id: "WL-ACCRAPAC-2023",
-        company: "Accra-Pac",
-        date: "2023-04-20",
-        document_file: "data/external/accra_pac_04_20_2023.pdf",
-        allegations: [
-            {
-                risk_category: "Raw Materials",
-                themes: [
-                    "Impurity Testing Failure",
-                    "Supplier Oversight Failure"
-                ]
-            }
-        ],
-        cfr_violations: ["21 CFR 211.84"]
-    }
-    
-    ];
-    
-    
-    /* =====================================================
-       ONTOLOGY
-    ===================================================== */
-    
-    const ONTOLOGY = {
-        risk_categories: [
-            "Water Systems",
-            "Sterility",
-            "Supplier Management",
-            "Raw Materials",
-            "Investigations",
-            "Data Integrity",
-            "Laboratory Control",
-            "Governance"
-        ],
-        standardized_themes: [
-            "Water System Contamination",
-            "Sterility Assurance Failure",
-            "OOS Investigation Failure",
-            "Supplier Oversight Failure",
-            "Impurity Testing Failure",
-            "Data Integrity Failure",
-            "Inadequate Validation",
-            "Inadequate CAPA",
-            "Environmental Monitoring Failure",
-            "Laboratory Control Failure"
+        summary: "FDA warning letter cited inadequate oversight of contract manufacturer Brassica Pharma.",
+        key_findings: [
+            "Supplier oversight inadequate"
         ]
-    };
-    
-    
-    if (typeof module !== "undefined" && module.exports) {
-        module.exports = {
-            INTERNAL_AUDITS,
-            EXTERNAL_DOCUMENTS,
-            ONTOLOGY
-        };
     }
+
+];
+
+
+
+const THEME_CLUSTERS = [
+
+    {
+        cluster_id: "cluster_water",
+        parent_category: "Water System Contamination",
+        similarity_score: 0.93,
+        similarity_reason: "Internal engineering review identified Burkholderia detection and sanitization postponement while FDA cited water system contamination and inadequate sanitization controls.",
+        themes: [
+            "Sanitization Postponement",
+            "Biofilm Formation Risk",
+            "Burkholderia Detection",
+            "Water System Contamination",
+            "Burkholderia Cepacia Detection",
+            "Inadequate Sanitization Control"
+        ],
+        internal_docs: ["IA-ENG-2023-088"],
+        external_docs: ["WL-ACME-2025", "WL-ACCUPACK-2024"]
+    },
+
+    {
+        cluster_id: "cluster_oos",
+        parent_category: "OOS Investigation Failure",
+        similarity_score: 0.91,
+        similarity_reason: "Internal audit cited OOS retesting practices while FDA warning letters cited nearly identical failures involving invalid OOS investigations.",
+        themes: [
+            "OOS Retesting Practice",
+            "OOS Investigation Weakness",
+            "OOS Investigation Failure",
+            "OOS Retesting Violations"
+        ],
+        internal_docs: ["IA-FORT-2023-219"],
+        external_docs: ["WL-ACCUBIO-2022"]
+    },
+
+    {
+        cluster_id: "cluster_sterility",
+        parent_category: "Sterility Assurance Failure",
+        similarity_score: 0.92,
+        similarity_reason: "Internal sterile manufacturing audit identified media fill contamination and aseptic handling risks while FDA warning letters cited media fill failures.",
+        themes: [
+            "Media Fill Contamination",
+            "Aseptic Intervention Risk",
+            "Media Fill Failure",
+            "Aseptic Technique Deficiency",
+            "Aseptic Process Validation Gap"
+        ],
+        internal_docs: ["IA-LATINA-2024-044"],
+        external_docs: ["WL-ABRAXIS-2022"]
+    },
+
+    {
+        cluster_id: "cluster_supplier",
+        parent_category: "Supplier Oversight Deficiency",
+        similarity_score: 0.89,
+        similarity_reason: "Internal supplier audits identified reliance on documentation and lack of vendor oversight which aligns with FDA warning letters citing supplier qualification failures.",
+        themes: [
+            "Supplier Qualification Weakness",
+            "Supplier Self Assessment Reliance",
+            "Vendor Documentation Completeness Gap",
+            "Supplier Qualification Failure",
+            "CMO Oversight Failure"
+        ],
+        internal_docs: ["IA-BRASSICA-2023-112", "IA-EMQ-2024-011"],
+        external_docs: ["WL-AACE-2025", "WL-ACCRAPAC-2023"]
+    },
+
+    {
+        cluster_id: "cluster_impurity",
+        parent_category: "Impurity Testing Failure",
+        similarity_score: 0.88,
+        similarity_reason: "Internal audit identified benzene testing waivers while FDA warning letters cited benzene contamination due to inadequate impurity testing.",
+        themes: [
+            "Benzene Testing Waiver",
+            "Impurity Testing Gap",
+            "Benzene Contamination",
+            "Propellant Impurity Failure"
+        ],
+        internal_docs: ["IA-FORT-2023-219"],
+        external_docs: ["WL-ACCRAPAC-2023"]
+    },
+
+    {
+        cluster_id: "cluster_product_quality",
+        parent_category: "Product Quality Failure",
+        similarity_score: 0.85,
+        similarity_reason: "External warning letters cited subpotent product quality failures due to inadequate testing methods.",
+        themes: [
+            "Subpotent Drug Product",
+            "Product Quality Failure",
+            "Finished Product Testing Gap"
+        ],
+        internal_docs: ["IA-FORT-2023-219"],
+        external_docs: ["WL-ABSARA-2021"]
+    }
+
+];

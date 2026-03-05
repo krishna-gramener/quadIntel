@@ -147,13 +147,98 @@ regulatory-intelligence/
 - **Drag** nodes to rearrange layout
 - **Zoom/Pan** to explore relationships
 
+## 📝 Updates & Change Log
+
+### Version 2.0 - March 2026
+**Major Redesign: Ontology-Based Correlation System**
+
+#### 🎯 Core Architecture Changes
+- **Removed**: Old correlation analysis workflow (Summary, Discrepancy, Ontology tabs)
+- **Added**: Cluster-based theme ontology system with 6 risk clusters
+- **Simplified**: Two main views - Ontology Graph and Document Analysis
+
+#### 🔄 New Features
+
+**1. Ontology Graph View**
+- Interactive D3.js force-directed graph visualization
+- 6 theme clusters mapping internal audits to FDA warning letters
+- Color-coded nodes:
+  - Purple: Risk cluster nodes
+  - Green: Internal audit themes
+  - Blue: External warning letter themes
+  - Amber: Shared themes
+- Click on cluster nodes to view detailed correlation analysis
+- Compact graph layout with adjustable zoom (80% initial scale)
+- Multi-stage loading animation (4 seconds):
+  - "Analyzing documents..."
+  - "Extracting themes..."
+  - "Generating nodes..."
+  - "Finalizing graph..."
+
+**2. Document Analysis Tab**
+- New dedicated view for internal audit documents
+- Left panel: List of all 5 internal audits with theme counts
+- Right panel: Detailed document information including:
+  - Full summary
+  - All themes displayed as badges
+  - Recommendations with checkmarks
+  - "View Document" button for PDF access
+- Tab is disabled until ontology graph completes loading
+- 500ms loading animation when selecting documents
+
+**3. Enhanced Loading Experience**
+- Landing page button shows spinning loader during transition
+- Graph rendering with progressive status messages
+- Document detail loading with spinner
+- All loaders use consistent purple branding
+
+#### 📊 Data Structure Updates
+- **5 Internal Audits**: EMQ, Latina, Brassica, Fort Washington, Water Systems
+- **8 External Warning Letters**: FDA citations from various companies
+- **6 Theme Clusters**:
+  1. Water System Contamination (93% similarity)
+  2. OOS Investigation Failure (91% similarity)
+  3. Sterility Assurance Failure (92% similarity)
+  4. Supplier Oversight Deficiency (89% similarity)
+  5. Impurity Testing Failure (88% similarity)
+  6. Product Quality Failure (85% similarity)
+
+#### 🎨 UI/UX Improvements
+- Redesigned landing page with updated document counts
+- Removed risk cluster count from landing page
+- Added static info message: "Click on any cluster node to view detailed correlation analysis"
+- Tab-based navigation between Ontology Graph and Document Analysis
+- Sidebar with Internal/External document lists and view buttons
+- PDF viewer modal for all documents
+- Responsive layout with proper overflow handling
+
+#### 🔧 Technical Improvements
+- Removed unused `similarity.js` module
+- Cleaned up app.js (removed 575+ lines of old code)
+- Optimized graph force simulation parameters:
+  - Link distance: 60
+  - Charge strength: -70
+  - Collision radius: node size + 10
+- Proper tab state management
+- Loading state management with timeouts
+- Data formatted with proper JavaScript object notation
+
+#### 🐛 Bug Fixes
+- Fixed THEME_CLUSTERS undefined error
+- Removed currentInternalDoc reference errors
+- Corrected document counts (5 internal, 8 external)
+- Fixed animation keyframe implementation
+- Proper setTimeout closure for document loading
+
+---
+
 ## 🎨 Visual Design
 
 ### Color Coding
 - 🟢 **Green**: Internal documents, shared themes
 - 🔵 **Blue**: External documents, internal-only themes
-- 🟠 **Orange**: Themes
-- 🟣 **Purple**: Risk categories
+- 🟠 **Amber**: Shared themes
+- 🟣 **Purple**: Risk cluster nodes
 - 🔴 **Red**: CFR references, missing critical themes
 
 ### Risk Scoring

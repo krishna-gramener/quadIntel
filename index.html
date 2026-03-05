@@ -1,29 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QuadIntel - Regulatory Risk Correlation System</title>
-    
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- D3.js for Graph Visualization -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    
+
     <!-- Custom Styles -->
-    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-in;
+        }
+
+        .animate-slide-up {
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 </head>
+
 <body class="bg-gray-50 font-sans antialiased">
-    
+
     <!-- Landing Page -->
-    <div id="landing-page" class="min-h-screen bg-gray-50 flex items-center justify-center p-6">
+    <div id="landing-page"
+        class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-6">
         <div class="max-w-4xl w-full">
             <!-- Logo/Icon -->
             <div class="text-center mb-8 animate-fade-in">
                 <div class="inline-flex items-center justify-center w-24 h-24 bg-blue-600 rounded-2xl mb-6 shadow-xl">
                     <svg class="w-14 h-14 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
+                        </path>
                     </svg>
                 </div>
                 <h1 class="text-6xl font-bold text-gray-900 mb-4 tracking-tight">
@@ -31,35 +66,42 @@
                 </h1>
                 <p class="text-xl text-gray-600 font-medium">Regulatory Risk Correlation System</p>
             </div>
-            
+
             <!-- Description Card -->
             <div class="bg-white rounded-2xl shadow-xl border border-gray-200 p-8 mb-8 animate-slide-up">
                 <h2 class="text-2xl font-bold text-gray-900 mb-4">Intelligence-Driven Compliance</h2>
                 <p class="text-gray-700 leading-relaxed mb-6">
-                    QuadIntel correlates internal audit findings with FDA warning letter patterns to identify regulatory risks before they escalate. 
-                    Using advanced ontology mapping and theme-based analysis, the system reveals hidden compliance gaps and enforcement trends.
+                    QuadIntel correlates internal audit findings with FDA warning letter patterns to identify regulatory
+                    risks before they escalate.
+                    Using advanced ontology mapping and theme-based analysis, the system reveals hidden compliance gaps
+                    and enforcement trends.
                 </p>
-                
+
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                     <div class="flex items-start space-x-3">
                         <div class="flex-shrink-0">
                             <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
                             </div>
                         </div>
                         <div>
                             <h3 class="font-semibold text-gray-900 text-sm">Pattern Recognition</h3>
-                            <p class="text-xs text-gray-600 mt-1">Identify enforcement trends across 8 FDA warning letters</p>
+                            <p class="text-xs text-gray-600 mt-1">Identify enforcement trends across FDA warning letters
+                            </p>
                         </div>
                     </div>
-                    
+
                     <div class="flex items-start space-x-3">
                         <div class="flex-shrink-0">
                             <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                                 </svg>
                             </div>
                         </div>
@@ -68,46 +110,50 @@
                             <p class="text-xs text-gray-600 mt-1">Instant correlation scoring and risk assessment</p>
                         </div>
                     </div>
-                    
+
                     <div class="flex items-start space-x-3">
                         <div class="flex-shrink-0">
                             <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                                <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01">
+                                    </path>
                                 </svg>
                             </div>
                         </div>
                         <div>
-                            <h3 class="font-semibold text-gray-900 text-sm">Document Intelligence</h3>
-                            <p class="text-xs text-gray-600 mt-1">Inline PDF viewing with smart navigation</p>
+                            <h3 class="font-semibold text-gray-900 text-sm">Interactive Visualization</h3>
+                            <p class="text-xs text-gray-600 mt-1">Explore theme clusters and relationships</p>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="flex items-center justify-between pt-4 border-t border-gray-200">
                     <div class="text-sm text-gray-600">
-                        <span class="font-semibold text-gray-900">5</span> Internal Audits • 
-                        <span class="font-semibold text-gray-900">8</span> Warning Letters • 
-                        <span class="font-semibold text-gray-900">10</span> Risk Themes
+                        <span class="font-semibold text-gray-900" id="landing-internal-count">5</span> Internal Audits •
+                        <span class="font-semibold text-gray-900" id="landing-external-count">7</span> Warning Letters
                     </div>
                 </div>
             </div>
-            
+
             <!-- CTA Button -->
             <div class="text-center">
-                <button id="proceed-btn" class="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105">
-                    <span>Proceed to Analysis</span>
-                    <svg class="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                <button id="proceed-btn"
+                    class="inline-flex items-center px-8 py-4 bg-blue-600 text-white text-lg font-semibold rounded-xl hover:bg-blue-700 transition shadow-lg hover:shadow-xl transform hover:scale-105">
+                    Proceed to Analysis
+                    <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
                     </svg>
                 </button>
             </div>
         </div>
     </div>
-    
+
     <!-- Main Application Container -->
     <div id="main-app" class="hidden flex h-screen overflow-hidden">
-        
+
         <!-- Sidebar -->
         <aside class="w-80 bg-white border-r border-gray-200 flex flex-col">
             <!-- Header -->
@@ -115,395 +161,150 @@
                 <h1 class="text-xl font-bold text-gray-900">Quad<span class="text-blue-600">Intel</span></h1>
                 <p class="text-sm text-gray-500 mt-1">Regulatory Risk Correlation</p>
             </div>
-            
-            <!-- Internal Audits List -->
+
+            <!-- Tabs -->
+            <div class="border-b border-gray-200">
+                <div class="flex">
+                    <button id="tab-internal"
+                        class="flex-1 px-4 py-3 text-sm font-medium text-gray-700 border-b-2 border-green-500 bg-green-50">
+                        Internal Documents
+                    </button>
+                    <button id="tab-external"
+                        class="flex-1 px-4 py-3 text-sm font-medium text-gray-500 border-b-2 border-transparent hover:text-gray-700 hover:border-gray-300">
+                        External Docs
+                    </button>
+                </div>
+            </div>
+
+            <!-- Document Lists -->
             <div class="flex-1 overflow-y-auto p-4">
-                <h2 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Internal Audits</h2>
-                <div id="audit-list" class="space-y-2">
+                <!-- Internal Documents -->
+                <div id="internal-docs-list" class="space-y-2">
+                    <!-- Populated by JS -->
+                </div>
+
+                <!-- External Documents -->
+                <div id="external-docs-list" class="space-y-2 hidden">
                     <!-- Populated by JS -->
                 </div>
             </div>
-            
+
             <!-- Footer Info -->
             <div class="p-4 border-t border-gray-200 bg-gray-50">
                 <div class="text-xs text-gray-600">
                     <div class="flex justify-between mb-1">
                         <span>Internal Docs:</span>
-                        <span id="internal-count" class="font-semibold">5</span>
+                        <span id="internal-count" class="font-semibold">0</span>
                     </div>
                     <div class="flex justify-between">
                         <span>External Docs:</span>
-                        <span id="external-count" class="font-semibold">8</span>
+                        <span id="external-count" class="font-semibold">0</span>
                     </div>
                 </div>
             </div>
         </aside>
-        
+
         <!-- Main Content Area -->
         <main class="flex-1 flex flex-col overflow-hidden">
-            
-            <!-- Top Bar -->
-            <header class="bg-white border-b border-gray-200 px-6 py-4">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h2 id="selected-audit-title" class="text-2xl font-bold text-gray-900">Select an Internal Audit</h2>
-                        <p id="selected-audit-subtitle" class="text-sm text-gray-500 mt-1">Choose from the sidebar to begin analysis</p>
-                    </div>
-                    <div id="risk-score-badge" class="hidden">
-                        <div class="text-right">
-                            <div class="text-xs text-gray-500 uppercase tracking-wide">Risk Exposure</div>
-                            <div class="text-3xl font-bold" id="risk-score">--</div>
-                        </div>
-                    </div>
+
+            <!-- Top Bar with Tabs -->
+            <header class="bg-white border-b border-gray-200">
+                <div class="px-6 pt-4">
+                    <h2 class="text-2xl font-bold text-gray-900">Regulatory Intelligence Analysis</h2>
+                    <p class="text-sm text-gray-500 mt-1">Comprehensive correlation analysis and document insights</p>
                 </div>
-            </header>
-            
-            <!-- Tab Navigation -->
-            <nav class="bg-white border-b border-gray-200 px-6">
-                <div class="flex space-x-8">
-                    <button class="tab-button active py-4 px-1 border-b-2 border-blue-500 text-blue-600 font-medium text-sm" data-tab="summary">
-                        Summary
-                    </button>
-                    <button class="tab-button py-4 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium text-sm" data-tab="discrepancy">
-                        Discrepancy Analysis
-                    </button>
-                    <button class="tab-button py-4 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium text-sm" data-tab="ontology">
+
+                <!-- Tabs -->
+                <div class="px-6 mt-4 flex border-b border-gray-200">
+                    <button id="tab-graph"
+                        class="px-4 py-3 text-sm font-medium border-b-2 border-purple-500 text-purple-600">
                         Ontology Graph
                     </button>
+                    <button id="tab-documents"
+                        class="px-4 py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 opacity-50 cursor-not-allowed"
+                        disabled>
+                        Document Analysis
+                    </button>
                 </div>
-            </nav>
-            
-            <!-- Content Panels -->
-            <div class="flex-1 overflow-y-auto p-6">
-                
-                <!-- Welcome Screen -->
-                <div id="welcome-screen" class="flex items-center justify-center h-full">
-                    <div class="text-center">
-                        <svg class="mx-auto h-24 w-24 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                        <h3 class="mt-4 text-lg font-medium text-gray-900">No Audit Selected</h3>
-                        <p class="mt-2 text-sm text-gray-500">Select an internal audit from the sidebar to view correlation analysis</p>
-                    </div>
-                </div>
-                
-                <!-- Summary Tab -->
-                <div id="summary-tab" class="tab-content hidden">
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-                        <!-- Alignment Strength Card -->
-                        <div class="bg-white rounded-lg shadow p-6">
-                            <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wide">Alignment Strength</h3>
-                            <div id="alignment-strength-loader" class="hidden mt-2">
-                                <div class="animate-pulse flex space-x-2">
-                                    <div class="h-8 bg-gray-200 rounded w-24"></div>
-                                </div>
-                                <p class="mt-2 text-xs text-gray-400 italic">Analyzing patterns...</p>
-                            </div>
-                            <div id="alignment-strength-content">
-                                <p id="alignment-strength" class="mt-2 text-3xl font-bold">--</p>
-                                <p class="mt-1 text-sm text-gray-600">Based on theme overlap</p>
-                            </div>
+            </header>
+
+            <!-- Graph View -->
+            <div id="view-graph" class="flex-1 overflow-hidden flex flex-col">
+                <div class="px-6 py-3 bg-gray-50 border-b border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center text-xs text-purple-600">
+                            <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="font-medium">Click on any cluster node to view detailed correlation
+                                analysis</span>
                         </div>
-                        
-                        <!-- Theme Overlap Card -->
-                        <div class="bg-white rounded-lg shadow p-6">
-                            <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wide">Shared Themes</h3>
-                            <div id="shared-themes-loader" class="hidden mt-2">
-                                <div class="animate-pulse flex space-x-2">
-                                    <div class="h-8 bg-gray-200 rounded w-16"></div>
-                                </div>
-                                <p class="mt-2 text-xs text-gray-400 italic">Calculating overlap...</p>
-                            </div>
-                            <div id="shared-themes-content">
-                                <p id="shared-themes-count" class="mt-2 text-3xl font-bold">--</p>
-                                <p class="mt-1 text-sm text-gray-600">Common with external docs</p>
-                            </div>
+                        <div class="flex items-center space-x-2 text-sm">
+                            <span class="flex items-center">
+                                <span class="w-3 h-3 bg-purple-500 rounded-full mr-1"></span>
+                                <span class="text-gray-600">Clusters</span>
+                            </span>
+                            <span class="flex items-center ml-4">
+                                <span class="w-3 h-3 bg-green-500 rounded-full mr-1"></span>
+                                <span class="text-gray-600">Internal</span>
+                            </span>
+                            <span class="flex items-center ml-4">
+                                <span class="w-3 h-3 bg-blue-500 rounded-full mr-1"></span>
+                                <span class="text-gray-600">External</span>
+                            </span>
+                            <span class="flex items-center ml-4">
+                                <span class="w-3 h-3 bg-amber-500 rounded-full mr-1"></span>
+                                <span class="text-gray-600">Shared</span>
+                            </span>
                         </div>
-                        
-                        <!-- Overall Rating Card -->
-                        <div class="bg-white rounded-lg shadow p-6">
-                            <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wide">Internal Rating</h3>
-                            <div id="overall-rating-loader" class="hidden mt-2">
-                                <div class="animate-pulse flex space-x-2">
-                                    <div class="h-8 bg-gray-200 rounded w-32"></div>
-                                </div>
-                                <p class="mt-2 text-xs text-gray-400 italic">Loading rating...</p>
-                            </div>
-                            <div id="overall-rating-content">
-                                <p id="overall-rating" class="mt-2 text-3xl font-bold">--</p>
-                                <p class="mt-1 text-sm text-gray-600">Audit assessment</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Internal Summary -->
-                    <div class="bg-white rounded-lg shadow p-6 mb-6">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Internal Summary</h3>
-                        <div id="internal-summary-loader" class="hidden">
-                            <div class="animate-pulse space-y-3">
-                                <div class="h-4 bg-gray-200 rounded w-full"></div>
-                                <div class="h-4 bg-gray-200 rounded w-5/6"></div>
-                                <div class="h-4 bg-gray-200 rounded w-4/6"></div>
-                            </div>
-                            <p class="mt-3 text-xs text-gray-400 italic flex items-center">
-                                <svg class="animate-spin h-3 w-3 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                </svg>
-                                Generating summary...
-                            </p>
-                        </div>
-                        <p id="internal-summary" class="text-gray-700 leading-relaxed">--</p>
-                    </div>
-                    
-                    <!-- External Pattern Alignment -->
-                    <div class="bg-white rounded-lg shadow p-6 mb-6">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4">External Pattern Alignment</h3>
-                        <div id="external-alignment-loader" class="hidden">
-                            <div class="animate-pulse space-y-3">
-                                <div class="h-4 bg-gray-200 rounded w-full"></div>
-                                <div class="h-4 bg-gray-200 rounded w-5/6"></div>
-                                <div class="h-4 bg-gray-200 rounded w-3/4"></div>
-                            </div>
-                            <p class="mt-3 text-xs text-gray-400 italic flex items-center">
-                                <svg class="animate-spin h-3 w-3 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                </svg>
-                                Analyzing alignment patterns...
-                            </p>
-                        </div>
-                        <p id="external-alignment" class="text-gray-700 leading-relaxed">--</p>
-                    </div>
-                    
-                    <!-- Theme Overlap Table -->
-                    <div class="bg-white rounded-lg shadow p-6 mb-6">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4">External Document Overlap</h3>
-                        <div id="overlap-table-loader" class="hidden">
-                            <div class="animate-pulse space-y-4">
-                                <div class="h-10 bg-gray-200 rounded"></div>
-                                <div class="h-10 bg-gray-100 rounded"></div>
-                                <div class="h-10 bg-gray-200 rounded"></div>
-                                <div class="h-10 bg-gray-100 rounded"></div>
-                                <div class="h-10 bg-gray-200 rounded"></div>
-                            </div>
-                            <p class="mt-3 text-xs text-gray-400 italic flex items-center">
-                                <svg class="animate-spin h-3 w-3 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                </svg>
-                                Computing correlations...
-                            </p>
-                        </div>
-                        <div id="overlap-table-container" class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead>
-                                    <tr>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">External Document</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Theme Overlap</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Overlap %</th>
-                                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">View</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="overlap-table-body" class="bg-white divide-y divide-gray-200">
-                                    <!-- Populated by JS -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    
-                    <!-- Recommendations -->
-                    <div class="bg-white rounded-lg shadow p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Recommendations</h3>
-                        <div id="recommendations-loader" class="hidden">
-                            <div class="animate-pulse space-y-3">
-                                <div class="flex items-start space-x-3">
-                                    <div class="h-2 w-2 bg-gray-300 rounded-full mt-2"></div>
-                                    <div class="flex-1 space-y-2">
-                                        <div class="h-3 bg-gray-200 rounded w-full"></div>
-                                        <div class="h-3 bg-gray-200 rounded w-4/5"></div>
-                                    </div>
-                                </div>
-                                <div class="flex items-start space-x-3">
-                                    <div class="h-2 w-2 bg-gray-300 rounded-full mt-2"></div>
-                                    <div class="flex-1 space-y-2">
-                                        <div class="h-3 bg-gray-200 rounded w-full"></div>
-                                    </div>
-                                </div>
-                                <div class="flex items-start space-x-3">
-                                    <div class="h-2 w-2 bg-gray-300 rounded-full mt-2"></div>
-                                    <div class="flex-1 space-y-2">
-                                        <div class="h-3 bg-gray-200 rounded w-5/6"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <p class="mt-3 text-xs text-gray-400 italic flex items-center">
-                                <svg class="animate-spin h-3 w-3 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                </svg>
-                                Generating recommendations...
-                            </p>
-                        </div>
-                        <ul id="recommendations-list" class="space-y-3">
-                            <!-- Populated by JS -->
-                        </ul>
                     </div>
                 </div>
-                
-                <!-- Discrepancy Tab -->
-                <div id="discrepancy-tab" class="tab-content hidden">
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                        <!-- Shared Themes -->
-                        <div class="bg-white rounded-lg shadow p-6">
-                            <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                                <span class="w-3 h-3 bg-green-500 rounded-full mr-2"></span>
-                                Shared Themes
-                            </h3>
-                            <ul id="shared-themes-list" class="space-y-2">
+                <div class="flex-1 overflow-hidden p-6">
+                    <div class="bg-white rounded-lg shadow h-full">
+                        <div id="graph-container" class="w-full h-full"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Document Analysis View -->
+            <div id="view-documents" class="flex-1 overflow-hidden hidden">
+                <div class="h-full flex">
+                    <!-- Document List -->
+                    <div class="w-1/3 border-r border-gray-200 overflow-y-auto bg-gray-50">
+                        <div class="p-4">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-4">Internal Audit Documents</h3>
+                            <div id="document-analysis-list" class="space-y-3">
                                 <!-- Populated by JS -->
-                            </ul>
-                        </div>
-                        
-                        <!-- Internal-Only Themes -->
-                        <div class="bg-white rounded-lg shadow p-6">
-                            <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                                <span class="w-3 h-3 bg-blue-500 rounded-full mr-2"></span>
-                                Internal-Only Themes
-                            </h3>
-                            <ul id="internal-only-themes-list" class="space-y-2">
-                                <!-- Populated by JS -->
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <!-- Missing Critical Themes -->
-                    <div class="bg-white rounded-lg shadow p-6 mb-6">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                            <span class="w-3 h-3 bg-red-500 rounded-full mr-2"></span>
-                            Missing Critical Themes (Common in External Enforcement)
-                        </h3>
-                        <ul id="missing-themes-list" class="space-y-2">
-                            <!-- Populated by JS -->
-                        </ul>
-                    </div>
-                    
-                    <!-- Discrepancy Analysis -->
-                    <div class="bg-white rounded-lg shadow p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Discrepancy vs Enforcement Patterns</h3>
-                        <p id="discrepancy-text" class="text-gray-700 leading-relaxed">--</p>
-                    </div>
-                </div>
-                
-                <!-- Ontology Graph Tab -->
-                <div id="ontology-tab" class="tab-content hidden">
-                    <div class="bg-white rounded-lg shadow p-6">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-semibold text-gray-900">Regulatory Ontology Graph</h3>
-                            <div class="flex space-x-4 text-xs">
-                                <div class="flex items-center">
-                                    <span class="w-3 h-3 bg-green-500 rounded-full mr-1"></span>
-                                    <span>Internal Doc</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <span class="w-3 h-3 bg-blue-500 rounded-full mr-1"></span>
-                                    <span>External Doc</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <span class="w-3 h-3 bg-orange-500 rounded-full mr-1"></span>
-                                    <span>Theme</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <span class="w-3 h-3 bg-purple-500 rounded-full mr-1"></span>
-                                    <span>Risk Category</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <span class="w-3 h-3 bg-red-500 rounded-full mr-1"></span>
-                                    <span>CFR Reference</span>
-                                </div>
                             </div>
                         </div>
-                        <div id="graph-container" class="w-full" style="height: 700px; border: 1px solid #e5e7eb; border-radius: 0.5rem;">
-                            <!-- Graph rendered here -->
-                        </div>
-                        <div id="graph-info" class="mt-4 p-4 bg-gray-50 rounded-lg text-sm text-gray-600">
-                            <p><strong>Tip:</strong> Hover over nodes to see details. Click on risk category nodes to filter connections.</p>
+                    </div>
+
+                    <!-- Document Detail Panel -->
+                    <div class="flex-1 overflow-y-auto">
+                        <div id="document-detail-panel" class="p-6">
+                            <div class="text-center text-gray-400 py-20">
+                                <svg class="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                    </path>
+                                </svg>
+                                <p class="text-lg">Select a document to view details</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-                
             </div>
         </main>
     </div>
-    
-    <!-- Document Viewer Modal -->
-    <div id="document-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg shadow-2xl w-full max-w-6xl h-5/6 flex flex-col">
-            <!-- Modal Header -->
-            <div class="flex items-center justify-between p-4 border-b border-gray-200">
-                <div>
-                    <h3 id="modal-document-title" class="text-lg font-semibold text-gray-900">Document Viewer</h3>
-                    <p id="modal-document-subtitle" class="text-sm text-gray-500 mt-1"></p>
-                </div>
-                <button id="close-modal" class="text-gray-400 hover:text-gray-600 transition">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
-            </div>
-            
-            <!-- Modal Body -->
-            <div class="flex-1 overflow-hidden p-4">
-                <div id="document-viewer-container" class="w-full h-full bg-gray-100 rounded flex items-center justify-center">
-                    <iframe id="document-iframe" class="w-full h-full border-0 rounded" src=""></iframe>
-                </div>
-                <div id="document-loading" class="hidden w-full h-full flex items-center justify-center">
-                    <div class="text-center">
-                        <svg class="animate-spin h-12 w-12 text-blue-600 mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        <p class="text-gray-600">Loading document...</p>
-                    </div>
-                </div>
-                <div id="document-error" class="hidden w-full h-full flex items-center justify-center">
-                    <div class="text-center text-gray-600">
-                        <svg class="w-16 h-16 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                        </svg>
-                        <p class="text-lg font-medium mb-2">Unable to display document</p>
-                        <p class="text-sm">This document format may not be supported in the browser.</p>
-                        <a id="document-download-link" href="#" download class="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
-                            Download Document
-                        </a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Modal Footer -->
-            <div class="p-4 border-t border-gray-200 bg-gray-50 flex justify-between items-center">
-                <div class="text-sm text-gray-600">
-                    <span id="modal-document-type"></span>
-                </div>
-                <div class="flex space-x-2">
-                    <a id="open-new-tab" href="#" target="_blank" class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition text-sm">
-                        Open in New Tab
-                    </a>
-                    <button id="close-modal-btn" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition text-sm">
-                        Close
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-    
+
     <!-- Scripts -->
     <script src="js/data.js"></script>
-    <script src="js/similarity.js"></script>
     <script src="js/graph.js"></script>
     <script src="js/app.js"></script>
-    
+
 </body>
+
 </html>

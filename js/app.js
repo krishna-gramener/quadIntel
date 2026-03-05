@@ -3,30 +3,49 @@
  * Handles UI interactions, data loading, and view rendering
  */
 
-// Global state
-let currentInternalDoc = null;
-let currentCorrelationAnalysis = null;
-
 /**
  * Initialize the application on page load
  */
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     console.log('QuadIntel - Regulatory Risk Correlation System - Initializing...');
-    
+
+    // Update landing page counts
+    updateLandingPageCounts();
+
     // Set up landing page proceed button
     setupLandingPage();
-    
+
     // Load and display internal audits in sidebar
-    loadAuditList();
-    
-    // Set up tab navigation
-    setupTabNavigation();
-    
+    loadInternalDocumentsList();
+
+    // Load and display external documents list
+    loadExternalDocumentsList();
+
     // Update document counts
     updateDocumentCounts();
-    
+
+    // Setup sidebar tabs
+    setupSidebarTabs();
+
+    // Setup main view tabs
+    setupMainViewTabs();
+
+    // Load document analysis list
+    loadDocumentAnalysisList();
+
     console.log('Application initialized successfully');
 });
+
+/**
+ * Update landing page counts
+ */
+function updateLandingPageCounts() {
+    const internalCountEl = document.getElementById('landing-internal-count');
+    const externalCountEl = document.getElementById('landing-external-count');
+
+    if (internalCountEl) internalCountEl.textContent = INTERNAL_AUDITS.length;
+    if (externalCountEl) externalCountEl.textContent = EXTERNAL_DOCUMENTS.length;
+}
 
 /**
  * Setup landing page and proceed button
@@ -35,22 +54,36 @@ function setupLandingPage() {
     const proceedBtn = document.getElementById('proceed-btn');
     const landingPage = document.getElementById('landing-page');
     const mainApp = document.getElementById('main-app');
-    
+
     if (proceedBtn && landingPage && mainApp) {
-        proceedBtn.addEventListener('click', function() {
+        proceedBtn.addEventListener('click', function () {
+            // Show loading state
+            proceedBtn.innerHTML = `
+                <svg class="animate-spin h-5 w-5 mr-2 inline-block" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Loading Analysis...
+            `;
+            proceedBtn.disabled = true;
+
             // Fade out landing page
             landingPage.style.transition = 'opacity 0.5s ease-out';
             landingPage.style.opacity = '0';
-            
+
             setTimeout(() => {
                 landingPage.classList.add('hidden');
                 mainApp.classList.remove('hidden');
                 mainApp.style.opacity = '0';
-                
-                // Fade in main app
+
                 setTimeout(() => {
                     mainApp.style.transition = 'opacity 0.5s ease-in';
                     mainApp.style.opacity = '1';
+
+                    // Render the ontology graph with delay for loading effect
+                    setTimeout(() => {
+                        renderOntologyGraph();
+                    }, 300);
                 }, 50);
             }, 500);
         });
@@ -58,55 +91,69 @@ function setupLandingPage() {
 }
 
 /**
- * Load and display internal audit list in sidebar
+ * Load and display internal documents list in sidebar
  */
-function loadAuditList() {
-    const auditListContainer = document.getElementById('audit-list');
-    
-    if (!auditListContainer) return;
-    
-    auditListContainer.innerHTML = '';
-    
-    INTERNAL_AUDITS.forEach(audit => {
-        const auditItem = document.createElement('div');
-        auditItem.className = 'audit-item relative';
-        auditItem.dataset.auditId = audit.id;
-        
-        auditItem.innerHTML = `
+function loadInternalDocumentsList() {
+    const container = document.getElementById('internal-docs-list');
+    if (!container) return;
+
+    container.innerHTML = INTERNAL_AUDITS.map(audit => `
+        <div class="p-3 bg-white border border-gray-200 rounded hover:border-green-400 transition">
             <div class="flex items-start justify-between">
-                <div class="flex-1 audit-item-clickable">
-                    <div class="audit-item-title">${audit.title}</div>
-                    <div class="audit-item-meta">
-                        <span>${audit.function}</span>
-                        <span class="ml-2">•</span>
-                        <span class="ml-2">${audit.overall_rating}</span>
-                    </div>
+                <div class="flex-1">
+                    <div class="font-medium text-sm text-gray-900">${audit.title}</div>
+                    <div class="text-xs text-gray-500 mt-1">${audit.id}</div>
                 </div>
-                <button class="view-doc-btn ml-2 p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded transition flex-shrink-0" 
-                        data-doc-id="${audit.id}" 
-                        data-doc-type="internal"
+                <button class="ml-2 p-1.5 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded transition flex-shrink-0" 
+                        onclick="viewDocument('${audit.document_path}', '${audit.title.replace(/'/g, "\\'")}', '${audit.id}')"
                         title="View document">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                     </svg>
                 </button>
             </div>
-        `;
-        
-        // Click on main area to select audit
-        const clickableArea = auditItem.querySelector('.audit-item-clickable');
-        clickableArea.addEventListener('click', () => selectAudit(audit.id));
-        
-        // Click on eye button to view document
-        const viewBtn = auditItem.querySelector('.view-doc-btn');
-        viewBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            openDocumentViewer(audit.id, 'internal');
-        });
-        
-        auditListContainer.appendChild(auditItem);
-    });
+            <div class="flex flex-wrap gap-1 mt-2">
+                ${audit.themes.slice(0, 3).map(theme => `
+                    <span class="text-xs px-2 py-0.5 bg-green-100 text-green-700 rounded">${theme}</span>
+                `).join('')}
+                ${audit.themes.length > 3 ? `<span class="text-xs text-gray-500">+${audit.themes.length - 3} more</span>` : ''}
+            </div>
+        </div>
+    `).join('');
+}
+
+/**
+ * Load and display external documents list in sidebar
+ */
+function loadExternalDocumentsList() {
+    const container = document.getElementById('external-docs-list');
+    if (!container) return;
+
+    container.innerHTML = EXTERNAL_DOCUMENTS.map(doc => `
+        <div class="p-3 bg-white border border-gray-200 rounded hover:border-blue-400 transition">
+            <div class="flex items-start justify-between">
+                <div class="flex-1">
+                    <div class="font-medium text-sm text-gray-900">${doc.company}</div>
+                    <div class="text-xs text-gray-500 mt-1">${doc.id}</div>
+                </div>
+                <button class="ml-2 p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded transition flex-shrink-0" 
+                        onclick="viewDocument('${doc.document_path}', '${doc.company.replace(/'/g, "\\'")}', '${doc.id}')"
+                        title="View document">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="flex flex-wrap gap-1 mt-2">
+                ${doc.themes.slice(0, 3).map(theme => `
+                    <span class="text-xs px-2 py-0.5 bg-blue-100 text-blue-700 rounded">${theme}</span>
+                `).join('')}
+                ${doc.themes.length > 3 ? `<span class="text-xs text-gray-500">+${doc.themes.length - 3} more</span>` : ''}
+            </div>
+        </div>
+    `).join('');
 }
 
 /**
@@ -115,589 +162,396 @@ function loadAuditList() {
 function updateDocumentCounts() {
     const internalCount = document.getElementById('internal-count');
     const externalCount = document.getElementById('external-count');
-    
+
     if (internalCount) internalCount.textContent = INTERNAL_AUDITS.length;
     if (externalCount) externalCount.textContent = EXTERNAL_DOCUMENTS.length;
 }
 
 /**
- * Show all loading indicators
+ * Setup sidebar tabs for switching between internal and external documents
  */
-function showAllLoaders() {
-    // Summary tab loaders
-    const loaders = [
-        'alignment-strength-loader',
-        'shared-themes-loader',
-        'overall-rating-loader',
-        'internal-summary-loader',
-        'external-alignment-loader',
-        'overlap-table-loader',
-        'recommendations-loader'
-    ];
-    
-    loaders.forEach(loaderId => {
-        const loader = document.getElementById(loaderId);
-        const content = document.getElementById(loaderId.replace('-loader', '-content'));
-        const container = document.getElementById(loaderId.replace('-loader', '-container'));
-        
-        if (loader) loader.classList.remove('hidden');
-        if (content) content.classList.add('hidden');
-        if (container) container.classList.add('hidden');
+function setupSidebarTabs() {
+    const tabInternal = document.getElementById('tab-internal');
+    const tabExternal = document.getElementById('tab-external');
+    const internalList = document.getElementById('internal-docs-list');
+    const externalList = document.getElementById('external-docs-list');
+
+    if (!tabInternal || !tabExternal || !internalList || !externalList) return;
+
+    tabInternal.addEventListener('click', () => {
+        // Update tab styles
+        tabInternal.className = 'flex-1 px-4 py-3 text-sm font-medium text-gray-700 border-b-2 border-green-500 bg-green-50';
+        tabExternal.className = 'flex-1 px-4 py-3 text-sm font-medium text-gray-500 border-b-2 border-transparent hover:text-gray-700 hover:border-gray-300';
+
+        // Show/hide lists
+        internalList.classList.remove('hidden');
+        externalList.classList.add('hidden');
+    });
+
+    tabExternal.addEventListener('click', () => {
+        // Update tab styles
+        tabExternal.className = 'flex-1 px-4 py-3 text-sm font-medium text-gray-700 border-b-2 border-blue-500 bg-blue-50';
+        tabInternal.className = 'flex-1 px-4 py-3 text-sm font-medium text-gray-500 border-b-2 border-transparent hover:text-gray-700 hover:border-gray-300';
+
+        // Show/hide lists
+        externalList.classList.remove('hidden');
+        internalList.classList.add('hidden');
     });
 }
 
 /**
- * Hide specific loader and show its content
+ * Render the ontology graph
  */
-function hideLoader(loaderId) {
-    const loader = document.getElementById(loaderId);
-    const content = document.getElementById(loaderId.replace('-loader', '-content'));
-    const container = document.getElementById(loaderId.replace('-loader', '-container'));
-    
-    if (loader) loader.classList.add('hidden');
-    if (content) content.classList.remove('hidden');
-    if (container) container.classList.remove('hidden');
+function renderOntologyGraph() {
+    console.log('Rendering ontology graph...');
+
+    const container = document.getElementById('graph-container');
+    if (!container) return;
+
+    // Stage 1: Analyzing documents
+    container.innerHTML = `
+        <div class="flex items-center justify-center h-full">
+            <div class="text-center">
+                <svg class="animate-spin h-12 w-12 text-purple-600 mx-auto mb-4" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <p class="text-gray-600 font-medium" id="graph-loading-message">Analyzing documents...</p>
+                <div class="mt-3 flex items-center justify-center space-x-2">
+                    <div class="w-2 h-2 bg-purple-600 rounded-full animate-pulse"></div>
+                    <div class="w-2 h-2 bg-purple-400 rounded-full animate-pulse" style="animation-delay: 0.2s"></div>
+                    <div class="w-2 h-2 bg-purple-300 rounded-full animate-pulse" style="animation-delay: 0.4s"></div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    const messageEl = document.getElementById('graph-loading-message');
+
+    // Stage 2: Extracting themes (after 1s)
+    setTimeout(() => {
+        if (messageEl) messageEl.textContent = 'Extracting themes...';
+    }, 2000);
+
+    // Stage 3: Generating nodes (after 2s)
+    setTimeout(() => {
+        if (messageEl) messageEl.textContent = 'Generating nodes...';
+    }, 3000);
+
+    // Stage 4: Finalizing graph (after 3s)
+    setTimeout(() => {
+        if (messageEl) messageEl.textContent = 'Finalizing graph...';
+    }, 3000);
+
+    // Stage 5: Render graph (after 4s)
+    setTimeout(() => {
+        // Build graph data from clusters
+        const graphData = buildGraphData();
+
+        console.log('Graph data:', graphData);
+        console.log(`Nodes: ${graphData.nodes.length}, Links: ${graphData.links.length}`);
+
+        // Render graph
+        renderGraph(graphData, 'graph-container');
+
+        // Enable Document Analysis tab after graph is ready
+        const tabDocuments = document.getElementById('tab-documents');
+        if (tabDocuments) {
+            tabDocuments.disabled = false;
+            tabDocuments.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+    }, 4000);
 }
 
 /**
- * Select an internal audit and perform correlation analysis
- * @param {String} auditId - Internal audit ID
+ * Show animated hint pointing to a cluster node
  */
-function selectAudit(auditId) {
-    console.log(`Selecting audit: ${auditId}`);
-    
-    // Find the audit document
-    const audit = INTERNAL_AUDITS.find(a => a.id === auditId);
-    
-    if (!audit) {
-        console.error(`Audit not found: ${auditId}`);
+function showClusterClickHint() {
+    // Check if hint was already shown
+    if (localStorage.getItem('clusterHintShown')) {
         return;
     }
-    
-    // Update current state
-    currentInternalDoc = audit;
-    
-    // Update UI immediately
-    updateAuditSelection(auditId);
-    hideWelcomeScreen();
-    
-    // Show all loaders first
-    showAllLoaders();
-    
-    // Perform correlation analysis in background
-    setTimeout(() => {
-        currentCorrelationAnalysis = calculateCorrelationAnalysis(audit, EXTERNAL_DOCUMENTS);
-        console.log('Correlation analysis:', currentCorrelationAnalysis);
-        
-        // Update header info first (fast)
-        setTimeout(() => {
-            updateHeaderInfo(audit, currentCorrelationAnalysis);
-        }, 300);
-        
-        // Render summary tab with staggered timing
-        setTimeout(() => {
-            renderSummaryTab(audit, currentCorrelationAnalysis);
-        }, 600);
-        
-        // Render discrepancy tab
-        setTimeout(() => {
-            renderDiscrepancyTab(audit, currentCorrelationAnalysis);
-        }, 900);
-    }, 100);
-    
-    // Switch to summary tab
-    switchTab('summary');
-}
 
-/**
- * Update audit item selection in sidebar
- * @param {String} auditId - Selected audit ID
- */
-function updateAuditSelection(auditId) {
-    const allItems = document.querySelectorAll('.audit-item');
-    allItems.forEach(item => {
-        if (item.dataset.auditId === auditId) {
-            item.classList.add('active');
-        } else {
-            item.classList.remove('active');
-        }
-    });
-}
+    const container = document.getElementById('graph-container');
+    if (!container) return;
 
-/**
- * Update header information
- * @param {Object} audit - Internal audit document
- * @param {Object} analysis - Correlation analysis
- */
-function updateHeaderInfo(audit, analysis) {
-    const titleEl = document.getElementById('selected-audit-title');
-    const subtitleEl = document.getElementById('selected-audit-subtitle');
-    const riskScoreBadge = document.getElementById('risk-score-badge');
-    const riskScoreEl = document.getElementById('risk-score');
-    
-    if (titleEl) titleEl.textContent = audit.title;
-    if (subtitleEl) subtitleEl.textContent = `${audit.function} • ${audit.overall_rating}`;
-    
-    if (riskScoreBadge) riskScoreBadge.classList.remove('hidden');
-    if (riskScoreEl) {
-        riskScoreEl.textContent = analysis.riskScore;
-        riskScoreEl.className = getRiskClass(analysis.riskScore);
+    // Add custom animation keyframes if not already added
+    if (!document.getElementById('hint-animation-style')) {
+        const style = document.createElement('style');
+        style.id = 'hint-animation-style';
+        style.textContent = `
+            @keyframes slideDown {
+                from {
+                    opacity: 0;
+                    transform: translate(-50%, -20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translate(-50%, 0);
+                }
+            }
+            .hint-slide-down {
+                animation: slideDown 0.5s ease-out forwards;
+            }
+        `;
+        document.head.appendChild(style);
     }
-}
 
-/**
- * Hide welcome screen
- */
-function hideWelcomeScreen() {
-    const welcomeScreen = document.getElementById('welcome-screen');
-    if (welcomeScreen) welcomeScreen.style.display = 'none';
-}
-
-/**
- * Set up tab navigation
- */
-function setupTabNavigation() {
-    const tabButtons = document.querySelectorAll('.tab-button');
-    
-    tabButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const tabName = button.dataset.tab;
-            switchTab(tabName);
-        });
-    });
-}
-
-/**
- * Switch to a specific tab
- * @param {String} tabName - Tab name (summary, discrepancy, ontology)
- */
-function switchTab(tabName) {
-    console.log(`Switching to tab: ${tabName}`);
-    
-    // Update button states
-    const tabButtons = document.querySelectorAll('.tab-button');
-    tabButtons.forEach(button => {
-        if (button.dataset.tab === tabName) {
-            button.classList.add('active');
-        } else {
-            button.classList.remove('active');
-        }
-    });
-    
-    // Hide all tab contents
-    const tabContents = document.querySelectorAll('.tab-content');
-    tabContents.forEach(content => {
-        content.classList.add('hidden');
-    });
-    
-    // Show selected tab
-    const selectedTab = document.getElementById(`${tabName}-tab`);
-    if (selectedTab) {
-        selectedTab.classList.remove('hidden');
-        selectedTab.classList.add('fade-in');
-    }
-    
-    // Render ontology graph if switching to that tab
-    if (tabName === 'ontology' && currentInternalDoc && currentCorrelationAnalysis) {
-        renderOntologyTab(currentInternalDoc, currentCorrelationAnalysis);
-    }
-}
-
-/**
- * Render Summary Tab
- * @param {Object} audit - Internal audit document
- * @param {Object} analysis - Correlation analysis
- */
-function renderSummaryTab(audit, analysis) {
-    // Update cards with staggered timing
-    setTimeout(() => {
-        const alignmentEl = document.getElementById('alignment-strength');
-        if (alignmentEl) {
-            alignmentEl.textContent = analysis.alignmentStrength;
-            alignmentEl.className = `mt-2 text-3xl font-bold ${getAlignmentClass(analysis.alignmentStrength)}`;
-        }
-        hideLoader('alignment-strength-loader');
-    }, 400);
-    
-    setTimeout(() => {
-        const sharedThemesEl = document.getElementById('shared-themes-count');
-        if (sharedThemesEl) {
-            sharedThemesEl.textContent = analysis.globalOverlap.sharedCount;
-        }
-        hideLoader('shared-themes-loader');
-    }, 600);
-    
-    setTimeout(() => {
-        const ratingEl = document.getElementById('overall-rating');
-        if (ratingEl) {
-            ratingEl.textContent = audit.overall_rating;
-        }
-        hideLoader('overall-rating-loader');
-    }, 800);
-    
-    // Update internal summary
-    setTimeout(() => {
-        const summaryEl = document.getElementById('internal-summary');
-        if (summaryEl) {
-            summaryEl.textContent = audit.internal_summary;
-        }
-        hideLoader('internal-summary-loader');
-    }, 1000);
-    
-    // Update external alignment
-    setTimeout(() => {
-        const alignmentTextEl = document.getElementById('external-alignment');
-        if (alignmentTextEl) {
-            alignmentTextEl.textContent = audit.external_pattern_alignment;
-        }
-        hideLoader('external-alignment-loader');
-    }, 1200);
-    
-    // Render overlap table
-    setTimeout(() => {
-        renderOverlapTable(analysis.overlapResults);
-        hideLoader('overlap-table-loader');
-    }, 1400);
-    
-    // Render recommendations
-    setTimeout(() => {
-        renderRecommendations(audit.recommendations);
-        hideLoader('recommendations-loader');
-    }, 1600);
-}
-
-/**
- * Render overlap table
- * @param {Array} overlapResults - Array of overlap results
- */
-function renderOverlapTable(overlapResults) {
-    const tableBody = document.getElementById('overlap-table-body');
-    
-    if (!tableBody) return;
-    
-    tableBody.innerHTML = '';
-    
-    overlapResults.forEach(result => {
-        const row = document.createElement('tr');
-        row.className = 'hover:bg-gray-50';
-        
-        row.innerHTML = `
-            <td class="px-4 py-3 text-sm font-medium text-gray-900">${result.externalId}</td>
-            <td class="px-4 py-3 text-sm text-gray-700">${result.company}</td>
-            <td class="px-4 py-3 text-sm text-gray-600">${result.date}</td>
-            <td class="px-4 py-3 text-sm text-gray-700">${result.sharedCount} themes</td>
-            <td class="px-4 py-3">
+    // Create hint overlay at the top
+    const hint = document.createElement('div');
+    hint.id = 'cluster-hint';
+    hint.className = 'absolute top-4 left-1/2 z-50 hint-slide-down';
+    hint.innerHTML = `
+        <div class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-3 rounded-lg shadow-2xl">
+            <div class="flex items-center justify-between">
                 <div class="flex items-center">
-                    <div class="w-24 bg-gray-200 rounded-full h-2 mr-2">
-                        <div class="bg-blue-600 h-2 rounded-full" style="width: ${result.overlapPercentage}%"></div>
+                    <svg class="w-5 h-5 mr-3 animate-pulse" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"/>
+                    </svg>
+                    <div>
+                        <p class="font-semibold">💡 Click on any purple cluster node</p>
+                        <p class="text-xs text-purple-100 mt-0.5">to view detailed correlation analysis and related documents</p>
                     </div>
-                    <span class="text-sm font-semibold text-gray-900">${result.overlapPercentage}%</span>
                 </div>
-            </td>
-            <td class="px-4 py-3 text-center">
-                <button class="view-external-doc-btn p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded transition inline-flex" 
-                        data-doc-id="${result.externalId}"
-                        title="View warning letter">
+                <button onclick="dismissClusterHint()" class="ml-4 text-white hover:text-purple-200 transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                 </button>
-            </td>
-        `;
-        
-        // Add click handler for eye button
-        const viewBtn = row.querySelector('.view-external-doc-btn');
-        viewBtn.addEventListener('click', () => {
-            openDocumentViewer(result.externalId, 'external');
-        });
-        
-        tableBody.appendChild(row);
-    });
-}
+            </div>
+        </div>
+    `;
 
-/**
- * Render recommendations list
- * @param {Array} recommendations - Array of recommendation strings
- */
-function renderRecommendations(recommendations) {
-    const listEl = document.getElementById('recommendations-list');
-    
-    if (!listEl) return;
-    
-    listEl.innerHTML = '';
-    
-    recommendations.forEach(rec => {
-        const item = document.createElement('li');
-        item.className = 'recommendation-item';
-        item.textContent = rec;
-        listEl.appendChild(item);
-    });
-}
+    container.appendChild(hint);
 
-/**
- * Render Discrepancy Tab
- * @param {Object} audit - Internal audit document
- * @param {Object} analysis - Correlation analysis
- */
-function renderDiscrepancyTab(audit, analysis) {
-    // Render shared themes
-    const sharedList = document.getElementById('shared-themes-list');
-    if (sharedList) {
-        sharedList.innerHTML = '';
-        analysis.globalOverlap.shared.forEach(theme => {
-            const item = document.createElement('li');
-            item.className = 'theme-item theme-item-shared';
-            item.textContent = theme;
-            sharedList.appendChild(item);
-        });
-        
-        if (analysis.globalOverlap.shared.length === 0) {
-            sharedList.innerHTML = '<li class="text-sm text-gray-500 italic">No shared themes found</li>';
-        }
-    }
-    
-    // Render internal-only themes
-    const internalOnlyList = document.getElementById('internal-only-themes-list');
-    if (internalOnlyList) {
-        internalOnlyList.innerHTML = '';
-        analysis.globalOverlap.internalOnly.forEach(theme => {
-            const item = document.createElement('li');
-            item.className = 'theme-item theme-item-internal';
-            item.textContent = theme;
-            internalOnlyList.appendChild(item);
-        });
-        
-        if (analysis.globalOverlap.internalOnly.length === 0) {
-            internalOnlyList.innerHTML = '<li class="text-sm text-gray-500 italic">All internal themes are shared</li>';
-        }
-    }
-    
-    // Render missing critical themes
-    const missingList = document.getElementById('missing-themes-list');
-    if (missingList) {
-        missingList.innerHTML = '';
-        analysis.missingThemes.forEach(item => {
-            const li = document.createElement('li');
-            li.className = 'theme-item theme-item-missing';
-            li.innerHTML = `
-                <div class="flex justify-between items-center">
-                    <span>${item.theme}</span>
-                    <span class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">
-                        Found in ${item.frequency} external docs
-                    </span>
-                </div>
-            `;
-            missingList.appendChild(li);
-        });
-        
-        if (analysis.missingThemes.length === 0) {
-            missingList.innerHTML = '<li class="text-sm text-green-600 italic">No critical themes missing - excellent coverage</li>';
-        }
-    }
-    
-    // Render discrepancy text
-    const discrepancyText = document.getElementById('discrepancy-text');
-    if (discrepancyText) {
-        discrepancyText.textContent = audit.discrepancies_vs_enforcement;
-    }
-}
-
-/**
- * Render Ontology Tab
- * @param {Object} audit - Internal audit document
- * @param {Object} analysis - Correlation analysis
- */
-function renderOntologyTab(audit, analysis) {
-    console.log('Rendering ontology graph...');
-    
-    // Build graph data
-    const graphData = buildGraphData(audit, EXTERNAL_DOCUMENTS, analysis);
-    
-    console.log('Graph data:', graphData);
-    
-    // Render graph
-    renderGraph(graphData, 'graph-container');
-}
-
-/**
- * Format date string
- * @param {String} dateStr - Date string
- * @returns {String} - Formatted date
- */
-function formatDate(dateStr) {
-    const date = new Date(dateStr);
-    return date.toLocaleDateString('en-US', { 
-        year: 'numeric', 
-        month: 'short', 
-        day: 'numeric' 
-    });
-}
-
-/**
- * Truncate text to specified length
- * @param {String} text - Text to truncate
- * @param {Number} maxLength - Maximum length
- * @returns {String} - Truncated text
- */
-function truncateText(text, maxLength = 100) {
-    if (text.length <= maxLength) return text;
-    return text.substring(0, maxLength) + '...';
-}
-
-/**
- * Open document viewer modal
- * @param {String} docId - Document ID
- * @param {String} docType - 'internal' or 'external'
- */
-function openDocumentViewer(docId, docType) {
-    console.log(`Opening document viewer for ${docType} document: ${docId}`);
-    
-    let docData = null;
-    let documentTitle = '';
-    let documentSubtitle = '';
-    let documentFile = '';
-    
-    // Find the document
-    if (docType === 'internal') {
-        docData = INTERNAL_AUDITS.find(d => d.id === docId);
-        if (docData) {
-            documentTitle = docData.title;
-            documentSubtitle = `${docData.function} • ${docData.overall_rating}`;
-            documentFile = docData.document_file;
-        }
-    } else if (docType === 'external') {
-        docData = EXTERNAL_DOCUMENTS.find(d => d.id === docId);
-        if (docData) {
-            documentTitle = docData.company;
-            documentSubtitle = `Warning Letter • ${docData.date}`;
-            documentFile = docData.document_file;
-        }
-    }
-    
-    if (!docData || !documentFile) {
-        console.error('Document not found or no file path specified');
-        alert('Document file not found');
-        return;
-    }
-    
-    // Update modal content
-    const modal = document.getElementById('document-modal');
-    const modalTitle = document.getElementById('modal-document-title');
-    const modalSubtitle = document.getElementById('modal-document-subtitle');
-    const modalType = document.getElementById('modal-document-type');
-    const iframe = document.getElementById('document-iframe');
-    const viewerContainer = document.getElementById('document-viewer-container');
-    const loadingDiv = document.getElementById('document-loading');
-    const errorDiv = document.getElementById('document-error');
-    const downloadLink = document.getElementById('document-download-link');
-    const openNewTabLink = document.getElementById('open-new-tab');
-    
-    if (modalTitle) modalTitle.textContent = documentTitle;
-    if (modalSubtitle) modalSubtitle.textContent = documentSubtitle;
-    
-    // Determine file type
-    const fileExt = documentFile.split('.').pop().toLowerCase();
-    const displayType = fileExt === 'pdf' ? 'PDF Document' : 'Document';
-    
-    if (modalType) modalType.textContent = displayType;
-    
-    // Show modal
-    if (modal) modal.classList.remove('hidden');
-    
-    // Show loading
-    if (viewerContainer) viewerContainer.classList.add('hidden');
-    if (loadingDiv) loadingDiv.classList.remove('hidden');
-    if (errorDiv) errorDiv.classList.add('hidden');
-    
-    // Set download link
-    if (downloadLink) {
-        downloadLink.href = documentFile;
-        downloadLink.download = documentFile.split('/').pop();
-    }
-    
-    // Set open in new tab link
-    if (openNewTabLink) {
-        openNewTabLink.href = documentFile;
-    }
-    
-    // Load PDF document in iframe
+    // Auto-dismiss after 7 seconds
     setTimeout(() => {
-        if (fileExt === 'pdf') {
-            // All documents are now PDFs - display directly in iframe
-            iframe.src = documentFile;
-            if (viewerContainer) viewerContainer.classList.remove('hidden');
-            if (loadingDiv) loadingDiv.classList.add('hidden');
-        } else {
-            // Unsupported file type
-            console.error('Unsupported file type:', fileExt);
-            if (viewerContainer) viewerContainer.classList.add('hidden');
-            if (loadingDiv) loadingDiv.classList.add('hidden');
-            if (errorDiv) errorDiv.classList.remove('hidden');
-        }
-    }, 300);
+        dismissClusterHint();
+    }, 7000);
 }
 
 /**
- * Close document viewer modal
+ * Dismiss the cluster hint
  */
-function closeDocumentViewer() {
-    const modal = document.getElementById('document-modal');
-    const iframe = document.getElementById('document-iframe');
-    
-    if (modal) modal.classList.add('hidden');
-    if (iframe) iframe.src = '';
+function dismissClusterHint() {
+    const hint = document.getElementById('cluster-hint');
+    if (hint) {
+        hint.style.transition = 'opacity 0.3s ease-out';
+        hint.style.opacity = '0';
+        setTimeout(() => {
+            hint.remove();
+        }, 300);
+    }
+    // Mark as shown so it doesn't appear again
+    localStorage.setItem('clusterHintShown', 'true');
 }
 
 /**
- * Setup document viewer modal event listeners
+ * View a document in a modal
+ * @param {String} documentPath - Path to the PDF document
+ * @param {String} title - Document title
+ * @param {String} id - Document ID
  */
-function setupDocumentViewerModal() {
-    const closeModalBtn = document.getElementById('close-modal');
-    const closeModalBtn2 = document.getElementById('close-modal-btn');
-    const modal = document.getElementById('document-modal');
-    
-    // Close button clicks
-    if (closeModalBtn) {
-        closeModalBtn.addEventListener('click', closeDocumentViewer);
-    }
-    
-    if (closeModalBtn2) {
-        closeModalBtn2.addEventListener('click', closeDocumentViewer);
-    }
-    
-    // Click outside modal to close
-    if (modal) {
+function viewDocument(documentPath, title, id) {
+    // Create modal if it doesn't exist
+    let modal = document.getElementById('pdf-viewer-modal');
+
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'pdf-viewer-modal';
+        modal.className = 'fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4';
+        modal.innerHTML = `
+            <div class="bg-white rounded-lg shadow-2xl w-full max-w-6xl h-5/6 flex flex-col">
+                <div class="flex items-center justify-between p-4 border-b border-gray-200">
+                    <div>
+                        <h3 id="pdf-title" class="text-lg font-semibold text-gray-900"></h3>
+                        <p id="pdf-id" class="text-sm text-gray-500 mt-1"></p>
+                    </div>
+                    <button onclick="closePdfViewer()" class="text-gray-400 hover:text-gray-600 transition">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="flex-1 overflow-hidden p-4">
+                    <iframe id="pdf-iframe" class="w-full h-full border-0 rounded" src=""></iframe>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+
+        // Close on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
+                closePdfViewer();
+            }
+        });
+
+        // Close on backdrop click
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
-                closeDocumentViewer();
+                closePdfViewer();
             }
         });
     }
-    
-    // ESC key to close
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            const modal = document.getElementById('document-modal');
-            if (modal && !modal.classList.contains('hidden')) {
-                closeDocumentViewer();
-            }
-        }
+
+    // Update modal content
+    document.getElementById('pdf-title').textContent = title;
+    document.getElementById('pdf-id').textContent = id;
+    document.getElementById('pdf-iframe').src = documentPath;
+
+    // Show modal
+    modal.classList.remove('hidden');
+}
+
+/**
+ * Close the PDF viewer modal
+ */
+function closePdfViewer() {
+    const modal = document.getElementById('pdf-viewer-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+        document.getElementById('pdf-iframe').src = '';
+    }
+}
+
+/**
+ * Setup main view tabs (Graph vs Document Analysis)
+ */
+function setupMainViewTabs() {
+    const tabGraph = document.getElementById('tab-graph');
+    const tabDocuments = document.getElementById('tab-documents');
+    const viewGraph = document.getElementById('view-graph');
+    const viewDocuments = document.getElementById('view-documents');
+
+    if (!tabGraph || !tabDocuments || !viewGraph || !viewDocuments) return;
+
+    tabGraph.addEventListener('click', () => {
+        // Update tab styles
+        tabGraph.className = 'px-4 py-3 text-sm font-medium border-b-2 border-purple-500 text-purple-600';
+        tabDocuments.className = 'px-4 py-3 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300';
+
+        // Show/hide views
+        viewGraph.classList.remove('hidden');
+        viewDocuments.classList.add('hidden');
+    });
+
+    tabDocuments.addEventListener('click', () => {
+        // Update tab styles
+        tabDocuments.className = 'px-4 py-3 text-sm font-medium border-b-2 border-purple-500 text-purple-600';
+        tabGraph.className = 'px-4 py-3 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300';
+
+        // Show/hide views
+        viewDocuments.classList.remove('hidden');
+        viewGraph.classList.add('hidden');
     });
 }
 
-// Initialize document viewer modal on page load
-document.addEventListener('DOMContentLoaded', function() {
-    setupDocumentViewerModal();
-});
+/**
+ * Load document analysis list
+ */
+function loadDocumentAnalysisList() {
+    const container = document.getElementById('document-analysis-list');
+    if (!container) return;
 
-// Export for debugging
-window.appDebug = {
-    currentInternalDoc,
-    currentCorrelationAnalysis,
-    INTERNAL_AUDITS,
-    EXTERNAL_DOCUMENTS,
-    ONTOLOGY
-};
+    container.innerHTML = INTERNAL_AUDITS.map(audit => `
+        <div class="bg-white border border-gray-200 rounded-lg p-4 hover:border-purple-400 hover:shadow-md transition cursor-pointer"
+             onclick="showDocumentDetail('${audit.id}')">
+            <div class="flex items-start justify-between">
+                <div class="flex-1">
+                    <h4 class="font-semibold text-sm text-gray-900">${audit.title}</h4>
+                    <p class="text-xs text-gray-500 mt-1">${audit.id}</p>
+                    <div class="flex items-center mt-2 text-xs text-gray-600">
+                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"></path>
+                        </svg>
+                        ${audit.themes.length} themes
+                    </div>
+                </div>
+                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </div>
+        </div>
+    `).join('');
+}
 
-console.log('App module loaded. Debug info available at window.appDebug');
+/**
+ * Show document detail panel
+ */
+function showDocumentDetail(auditId) {
+    const audit = INTERNAL_AUDITS.find(a => a.id === auditId);
+    if (!audit) return;
+
+    const panel = document.getElementById('document-detail-panel');
+    if (!panel) return;
+
+    // Show loading state
+    panel.innerHTML = `
+        <div class="flex items-center justify-center h-full">
+            <div class="text-center">
+                <svg class="animate-spin h-10 w-10 text-purple-600 mx-auto mb-4" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <p class="text-gray-600 font-medium">Loading document details...</p>
+            </div>
+        </div>
+    `;
+
+    // Simulate loading time
+    setTimeout(() => {
+        panel.innerHTML = `
+        <div class="max-w-4xl">
+            <!-- Header -->
+            <div class="border-b border-gray-200 pb-4 mb-6">
+                <div class="flex items-start justify-between">
+                    <div class="flex-1">
+                        <h2 class="text-2xl font-bold text-gray-900">${audit.title}</h2>
+                        <p class="text-sm text-gray-500 mt-1">${audit.id}</p>
+                    </div>
+                    <button onclick="viewDocument('${audit.document_path}', '${audit.title.replace(/'/g, "\\'")}', '${audit.id}')"
+                            class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                        </svg>
+                        View Document
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Summary -->
+            <div class="mb-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-3">Summary</h3>
+                <p class="text-gray-700 leading-relaxed">${audit.summary}</p>
+            </div>
+            
+            <!-- Themes -->
+            <div class="mb-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-3">Key Themes (${audit.themes.length})</h3>
+                <div class="flex flex-wrap gap-2">
+                    ${audit.themes.map(theme => `
+                        <span class="px-3 py-1.5 bg-green-100 text-green-800 text-sm rounded-full">${theme}</span>
+                    `).join('')}
+                </div>
+            </div>
+            
+            <!-- Recommendations -->
+            <div class="mb-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-3">Recommendations</h3>
+                <ul class="space-y-2">
+                    ${audit.recommendations.map(rec => `
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-purple-600 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-700">${rec}</span>
+                        </li>
+                    `).join('')}
+                </ul>
+            </div>
+        </div>
+    `;
+    }, 500);
+}
