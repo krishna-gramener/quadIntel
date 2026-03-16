@@ -486,6 +486,9 @@ function showDocumentDetail(auditId) {
     const panel = document.getElementById('document-detail-panel');
     if (!panel) return;
 
+    // Store current audit ID for persona refresh
+    panel.dataset.currentAuditId = auditId;
+
     // Show loading state
     panel.innerHTML = `
         <div class="flex items-center justify-center h-full">
@@ -523,8 +526,47 @@ function showDocumentDetail(auditId) {
             
             <!-- Summary -->
             <div class="mb-6">
-                <h3 class="text-lg font-semibold text-gray-900 mb-3">Summary</h3>
-                <p class="text-gray-700 leading-relaxed">${audit.summary}</p>
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-lg font-semibold text-gray-900">Summary</h3>
+                    <div class="flex items-center gap-2">
+                        <label for="persona-select" class="text-xs font-semibold text-gray-600">View as:</label>
+                        <select id="persona-select" 
+                                class="px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-white">
+                            <option value="" ${!currentPersona ? 'selected' : ''}>Default</option>
+                            <optgroup label="SCQ">
+                                <option value="qc_operations" ${currentPersona && currentPersona.id === 'qc_operations' ? 'selected' : ''}>QC Operations</option>
+                                <option value="stability_labs" ${currentPersona && currentPersona.id === 'stability_labs' ? 'selected' : ''}>Stability Labs</option>
+                            </optgroup>
+                            <optgroup label="CQ">
+                                <option value="npi" ${currentPersona && currentPersona.id === 'npi' ? 'selected' : ''}>NPI</option>
+                                <option value="regional_quality" ${currentPersona && currentPersona.id === 'regional_quality' ? 'selected' : ''}>Regional Quality</option>
+                            </optgroup>
+                            <optgroup label="EQ">
+                                <option value="external_labs" ${currentPersona && currentPersona.id === 'external_labs' ? 'selected' : ''}>External Labs</option>
+                                <option value="supplier_risk" ${currentPersona && currentPersona.id === 'supplier_risk' ? 'selected' : ''}>Supplier Risk Management</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
+                ${currentPersona && audit.personaSummaries && audit.personaSummaries[currentPersona.id] ? `
+                    <div class="mb-4 p-4 bg-purple-50 border-l-4 border-purple-500 rounded">
+                        <div class="flex items-start">
+                            <svg class="w-5 h-5 text-purple-600 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                            </svg>
+                            <div class="flex-1">
+                                <div class="font-semibold text-purple-900 mb-2">${currentPersona.name} Perspective</div>
+                                <div class="text-sm text-purple-800 leading-relaxed">${audit.personaSummaries[currentPersona.id]}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3 p-3 bg-gray-50 rounded border border-gray-200">
+                        <div class="text-xs font-semibold text-gray-700 mb-1">General Audit Summary</div>
+                        <p class="text-sm text-gray-600 leading-relaxed">${audit.summary}</p>
+                    </div>
+                ` : `
+                    <p class="text-gray-700 leading-relaxed">${audit.summary}</p>
+                `}
             </div>
             
             <!-- Themes -->
@@ -553,5 +595,26 @@ function showDocumentDetail(auditId) {
             </div>
         </div>
     `;
+        
+        // Setup persona selector event listener after DOM is updated
+        setTimeout(() => {
+            const personaSelect = document.getElementById('persona-select');
+            if (personaSelect) {
+                // Add event listener
+                personaSelect.addEventListener('change', function(e) {
+                    const personaId = e.target.value;
+                    
+                    if (personaId) {
+                        currentPersona = getPersonaById(personaId);
+                    } else {
+                        currentPersona = null;
+                    }
+                    
+                    // Refresh the document detail view
+                    showDocumentDetail(auditId);
+                });
+            }
+        }, 100);
     }, 500);
 }
+

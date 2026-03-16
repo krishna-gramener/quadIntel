@@ -350,6 +350,14 @@ function showClusterDetails(clusterNode) {
         document.body.appendChild(panel);
     }
 
+    // Store cluster data for persona refresh
+    panel.dataset.currentClusterId = clusterNode.nodeId;
+    panel.dataset.currentClusterLabel = clusterNode.label;
+    panel.dataset.currentClusterScore = clusterNode.similarity_score;
+    panel.dataset.currentClusterReason = clusterNode.similarity_reason;
+    panel.dataset.currentClusterInternal = JSON.stringify(clusterNode.internal_docs);
+    panel.dataset.currentClusterExternal = JSON.stringify(clusterNode.external_docs);
+
     // Get internal and external documents for this cluster
     const internalDocs = INTERNAL_AUDITS.filter(audit =>
         clusterNode.internal_docs.includes(audit.id)
@@ -375,6 +383,8 @@ function showClusterDetails(clusterNode) {
             </button>
         </div>
         
+
+        
         <div class="mb-4 p-3 bg-gray-50 rounded text-sm text-gray-700">
             <strong class="text-gray-900">Similarity Reason:</strong><br/>
             ${clusterNode.similarity_reason}
@@ -390,6 +400,12 @@ function showClusterDetails(clusterNode) {
                     <div class="p-3 bg-green-50 rounded border border-green-200">
                         <div class="font-medium text-sm text-gray-900">${doc.title}</div>
                         <div class="text-xs text-gray-600 mt-1">${doc.id}</div>
+                        ${currentPersona && doc.personaSummaries && doc.personaSummaries[currentPersona.id] ? `
+                            <div class="mt-2 p-2 bg-purple-100 rounded text-xs">
+                                <div class="font-semibold text-purple-900 mb-1">${currentPersona.name} Perspective</div>
+                                <div class="text-purple-800 leading-relaxed">${doc.personaSummaries[currentPersona.id]}</div>
+                            </div>
+                        ` : ''}
                         <div class="text-xs text-gray-700 mt-2">${doc.summary}</div>
                         ${doc.recommendations ? `
                             <div class="mt-2">
